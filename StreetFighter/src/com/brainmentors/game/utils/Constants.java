@@ -1,7 +1,12 @@
 package com.brainmentors.game.utils;
 
 public interface Constants {
+	String TITLE = "Street Fighter By Brain Mentors";
 	int SCREENHEIGHT = 900;
 	int SCREENWIDTH = 1700;
-	String TITLE = "Street Fighter By Brain Mentors";
+	int FLOOR = SCREENHEIGHT - 200;
+	int LEFTKEY = 37;
+	int RIGHTKEY = 39;
+	int DKEY = 68;
+	int AKEY = 65;
 }
