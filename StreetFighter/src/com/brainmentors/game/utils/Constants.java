@@ -7,6 +7,8 @@ public interface Constants {
 	int FLOOR = SCREENHEIGHT - 200;
 	int LEFTKEY = 37;
 	int RIGHTKEY = 39;
-	int DKEY = 68;
-	int AKEY = 65;
+	int IDLE = 1;
+	int WALK = 2;
+	int KICK = 3;
+	int PUNCH = 4;
 }

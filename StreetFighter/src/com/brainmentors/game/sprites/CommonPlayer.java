@@ -9,7 +9,10 @@ public abstract class CommonPlayer {
 	protected int w;
 	protected int h;
 	protected int speed;
+	protected int imageIndex;
+	protected int currentMove;
 	protected BufferedImage playerImg;
+	public abstract BufferedImage defaultImage();
 	
 	public int getX() {
 		return x;
@@ -43,6 +46,14 @@ public abstract class CommonPlayer {
 		this.h = h;
 	}
 
+	public int getCurrentMove() {
+		return currentMove;
+	}
+
+	public void setCurrentMove(int currentMove) {
+		this.currentMove = currentMove;
+	}
+
 	public int getSpeed() {
 		return speed;
 	}
@@ -58,18 +69,14 @@ public abstract class CommonPlayer {
 	public void setPlayerImg(BufferedImage playerImg) {
 		this.playerImg = playerImg;
 	}
-
-	public BufferedImage idle() {
-		return null;
-	}
 	
 	public void drawPlayer(Graphics pen) {
 		//pen.drawImage(playerImg, x, y, w, h, null);
-		pen.drawImage(idle(), x, y, w, h, null);
+		pen.drawImage(defaultImage(), x, y, w, h, null);
 	}
 	
 	public void move() {
 		x = x + speed;
-		System.out.println("Move : " + x);
+		//System.out.println("Move : " + x);
 	}
 }
