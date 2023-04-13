@@ -11,9 +11,18 @@ public abstract class CommonPlayer {
 	protected int speed;
 	protected int imageIndex;
 	protected int currentMove;
+	protected boolean isCollide;
 	protected BufferedImage playerImg;
 	public abstract BufferedImage defaultImage();
 	
+	public boolean isCollide() {
+		return isCollide;
+	}
+
+	public void setCollide(boolean isCollide) {
+		this.isCollide = isCollide;
+	}
+
 	public int getX() {
 		return x;
 	}
@@ -76,7 +85,9 @@ public abstract class CommonPlayer {
 	}
 	
 	public void move() {
-		x = x + speed;
+		if(!isCollide) {
+			x = x + speed;
+		}
 		//System.out.println("Move : " + x);
 	}
 }

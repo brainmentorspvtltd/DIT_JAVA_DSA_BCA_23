@@ -15,18 +15,20 @@ public class OpponentPlayer extends CommonPlayer implements Constants {
 	private BufferedImage walkImages[] = new BufferedImage[5];
 	private BufferedImage kickImages[] = new BufferedImage[5];
 	private BufferedImage punchImages[] = new BufferedImage[5];
+	private BufferedImage hitImages[] = new BufferedImage[3];
 	
 	public OpponentPlayer() throws Exception {
 		x = SCREENWIDTH - 500;
 		h = 200;
 		w = 150;
-		y = FLOOR - h;
-		speed = -10;
+		y = FLOOR;
+		speed = -SPEED;
 		playerImg = ImageIO.read(Player.class.getResource("ryu_.png"));
 		//playerImg = ImageIO.read(Player.class.getResource("thor.png"));
 		loadIdleImages();
 		loadWalkImages();
 		loadPunchImages();
+		loadHitImages();
 	}
 	
 	private void loadIdleImages() {
@@ -51,6 +53,12 @@ public class OpponentPlayer extends CommonPlayer implements Constants {
 		punchImages[2] = playerImg.getSubimage(2491, 1215, 186, 238);
 		punchImages[3] = playerImg.getSubimage(2731, 1215, 135, 238);
 		punchImages[4] = playerImg.getSubimage(2940, 1227, 111, 226);
+	}
+	
+	private void loadHitImages() {
+		hitImages[0] = playerImg.getSubimage(995, 1578, 123, 250);
+		hitImages[1] = playerImg.getSubimage(1171, 1574, 147, 238);
+		hitImages[2] = playerImg.getSubimage(1374, 1583, 124, 229);
 	}
 	
 	private void loadKickImages() {
@@ -93,6 +101,16 @@ public class OpponentPlayer extends CommonPlayer implements Constants {
 			currentMove = IDLE;
 		}
 		BufferedImage img = punchImages[imageIndex];
+		imageIndex++;
+		return img;
+	}
+	
+	public BufferedImage printHit() {
+		if(imageIndex > 2) {
+			imageIndex = 0;
+			currentMove = IDLE;
+		}
+		BufferedImage img = hitImages[imageIndex];
 		imageIndex++;
 		return img;
 	}

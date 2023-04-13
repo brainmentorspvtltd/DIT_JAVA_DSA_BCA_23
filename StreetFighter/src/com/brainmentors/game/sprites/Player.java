@@ -15,17 +15,34 @@ public class Player extends CommonPlayer implements Constants {
 	private BufferedImage kickImages[] = new BufferedImage[5];
 	private BufferedImage punchImages[] = new BufferedImage[3];
 	
+	private int force;
+	
 	public Player() throws Exception {
 		x = 300;
 		h = 200;
 		w = 150;
-		y = FLOOR - h;
-		speed = 10;
+		y = FLOOR;
+		speed = SPEED;
+		force = 0;
 		playerImg = ImageIO.read(Player.class.getResource("ken_.png"));
 		//playerImg = ImageIO.read(Player.class.getResource("thor.png"));
 		loadIdleImages();
 		loadWalkImages();
 		loadPunchImages();
+		loadKickImages();
+	}
+	
+	public void jump() {
+		force = -30;
+		y = y + force;
+	}
+	
+	public void fall() {
+		if(y + force > FLOOR) {
+			return;
+		}
+		force = force + GRAVITY;
+		y = y + force;
 	}
 	
 	private void loadIdleImages() {
@@ -44,7 +61,11 @@ public class Player extends CommonPlayer implements Constants {
 	}
 	
 	private void loadKickImages() {
-		
+		kickImages[0] = playerImg.getSubimage(43, 1461, 130, 243);
+		kickImages[1] = playerImg.getSubimage(245, 1462, 127, 240);
+		kickImages[2] = playerImg.getSubimage(426, 1462, 210, 240);
+		kickImages[3] = playerImg.getSubimage(245, 1462, 127, 240);
+		kickImages[4] = playerImg.getSubimage(43, 1461, 130, 243);
 	}
 	
 	private void loadPunchImages() {
@@ -85,6 +106,16 @@ public class Player extends CommonPlayer implements Constants {
 		return img;
 	}
 	
+	public BufferedImage printKick() {
+		if(imageIndex > 2) {
+			imageIndex = 0;
+			currentMove = IDLE;
+		}
+		BufferedImage img = kickImages[imageIndex];
+		imageIndex++;
+		return img;
+	}
+	
 	@Override
 	public BufferedImage defaultImage() {
 		if(currentMove == WALK) {
@@ -92,6 +123,9 @@ public class Player extends CommonPlayer implements Constants {
 		}
 		else if(currentMove == PUNCH) {
 			return printPunch();
+		}
+		else if(currentMove == KICK) {
+			return printKick();
 		}
 		else {
 			return printIdle();

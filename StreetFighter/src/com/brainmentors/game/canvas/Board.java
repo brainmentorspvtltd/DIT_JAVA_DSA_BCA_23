@@ -1,5 +1,6 @@
 package com.brainmentors.game.canvas;
 
+import java.awt.Color;
 //import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -14,6 +15,7 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import com.brainmentors.game.sprites.Health;
 import com.brainmentors.game.sprites.OpponentPlayer;
 import com.brainmentors.game.sprites.Player;
 import com.brainmentors.game.utils.Constants;
@@ -22,6 +24,10 @@ public class Board extends JPanel implements Constants {
 	BufferedImage imageBg;
 	private Player player;
 	private OpponentPlayer oppPlayer;
+	
+	private Health kenHealth;
+	private Health ryuHealth;
+	
 	private Timer timer;
 	public Board() throws Exception {
 		player = new Player();
@@ -29,6 +35,7 @@ public class Board extends JPanel implements Constants {
 		loadBackground();
 		setFocusable(true);
 		bindEvents();
+		loadHealth();
 		gameLoop();
 	}
 	
@@ -44,17 +51,49 @@ public class Board extends JPanel implements Constants {
 //	}
 	
 	private void gameLoop() {
-		timer = new Timer(150, new ActionListener() {
+		timer = new Timer(250, new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				//System.out.println("Hello World...");
 				//Date date = new Date();
 				//System.out.println(date);
+				player.fall();
+				collision();
 				repaint();
 			}
 		});
 		timer.start();
+	}
+	
+	private void loadHealth() {
+		kenHealth = new Health(30, Color.GREEN, "KEN");
+		ryuHealth = new Health(SCREENWIDTH - 760, Color.GREEN, "RYU");
+	}
+	
+	private void printHealth(Graphics pen) {
+		kenHealth.printHealthBar(pen);
+		ryuHealth.printHealthBar(pen);
+	}
+	
+	private boolean isCollide() {
+		int xDist = Math.abs(player.getX() - oppPlayer.getX());
+		int yDist = Math.abs(player.getY() - oppPlayer.getY());
+		int maxW = Math.max(player.getW(), oppPlayer.getW());
+		int maxH = Math.max(player.getH(), oppPlayer.getH());
+		return xDist <= maxW && yDist <= maxH; 
+	}
+	
+	private void collision() {
+		if(isCollide()) {
+			//System.out.println("Collision...");
+			player.setCollide(true);
+			player.setSpeed(0);
+		}
+		else {
+			player.setSpeed(SPEED);
+			player.setCollide(false);
+		}
 	}
 	
 	@Override
@@ -62,6 +101,7 @@ public class Board extends JPanel implements Constants {
 		showBackground(pen);
 		player.drawPlayer(pen);
 		oppPlayer.drawPlayer(pen);
+		printHealth(pen);
 	}
 	
 	private void bindEvents() {
@@ -81,13 +121,14 @@ public class Board extends JPanel implements Constants {
 			public void keyPressed(KeyEvent e) {
 				//System.out.println("Key Pressed : " + e.getKeyCode());
 				if(e.getKeyCode() == KeyEvent.VK_A || e.getKeyCode() == KeyEvent.VK_LEFT) {
-					player.setSpeed(-10);
+					player.setCollide(false);
+					player.setSpeed(-SPEED);
 					player.move();
 					player.setCurrentMove(WALK);
 					//repaint();
 				}
 				else if(e.getKeyCode() == KeyEvent.VK_D || e.getKeyCode() == KeyEvent.VK_RIGHT) {
-					player.setSpeed(10);
+					player.setSpeed(SPEED);
 					player.move();
 					player.setCurrentMove(WALK);
 					//repaint();
@@ -96,15 +137,22 @@ public class Board extends JPanel implements Constants {
 					player.setCurrentMove(PUNCH);
 					//repaint();
 				}
+				else if(e.getKeyCode() == KeyEvent.VK_Z) {
+					player.setCurrentMove(KICK);
+					//repaint();
+				}
+				else if(e.getKeyCode() == KeyEvent.VK_SPACE) {
+					player.jump();
+				}
 				
 				if(e.getKeyCode() == KeyEvent.VK_L) {
-					oppPlayer.setSpeed(10);
+					oppPlayer.setSpeed(SPEED);
 					oppPlayer.move();
 					oppPlayer.setCurrentMove(WALK);
 					//repaint();
 				}
 				else if(e.getKeyCode() == KeyEvent.VK_J) {
-					oppPlayer.setSpeed(-10);
+					oppPlayer.setSpeed(-SPEED);
 					oppPlayer.move();
 					oppPlayer.setCurrentMove(WALK);
 					//repaint();
