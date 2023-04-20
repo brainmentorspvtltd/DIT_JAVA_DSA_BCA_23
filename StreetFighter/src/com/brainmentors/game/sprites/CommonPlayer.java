@@ -3,7 +3,9 @@ package com.brainmentors.game.sprites;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
-public abstract class CommonPlayer {
+import com.brainmentors.game.utils.Constants;
+
+public abstract class CommonPlayer implements Constants {
 	protected int x;
 	protected int y;
 	protected int w;
@@ -12,9 +14,31 @@ public abstract class CommonPlayer {
 	protected int imageIndex;
 	protected int currentMove;
 	protected boolean isCollide;
+	protected int health;
+	protected boolean isAttacking;
 	protected BufferedImage playerImg;
 	public abstract BufferedImage defaultImage();
 	
+	public CommonPlayer() {
+		health = MAXHEALTH;
+	}
+	
+	public boolean isAttacking() {
+		return isAttacking;
+	}
+
+	public void setAttacking(boolean isAttacking) {
+		this.isAttacking = isAttacking;
+	}
+
+	public int getHealth() {
+		return health;
+	}
+
+	public void setHealth() {
+		this.health = (int)(health - MAXHEALTH * 0.05);
+	}
+
 	public boolean isCollide() {
 		return isCollide;
 	}

@@ -20,9 +20,11 @@ public class Health extends CommonPlayer {
 	public void printHealthBar(Graphics pen) {
 		pen.setColor(Color.RED);
 		pen.fillRect(x, y, w, h);
-		pen.setColor(color);
-		pen.fillRect(x, y, w, h);
-		pen.setFont(new Font("times", Font.BOLD, 50));
+		if(health > 0) {
+			pen.setColor(color);
+			pen.fillRect(x, y, health, h);
+			pen.setFont(new Font("times", Font.BOLD, 50));
+		}
 		pen.setColor(Color.WHITE);
 		pen.drawString(this.playerName, x, y + 100);
 	}

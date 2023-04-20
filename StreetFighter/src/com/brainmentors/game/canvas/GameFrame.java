@@ -18,13 +18,13 @@ public class GameFrame extends JFrame implements Constants {
 		setVisible(true);
 	}
 
-	public static void main(String[] args) {
-		try {
-			GameFrame obj = new GameFrame();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+//	public static void main(String[] args) {
+//		try {
+//			GameFrame obj = new GameFrame();
+//		} catch (Exception e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//	}
 
 }

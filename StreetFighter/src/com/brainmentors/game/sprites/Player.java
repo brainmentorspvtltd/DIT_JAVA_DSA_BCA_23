@@ -3,6 +3,7 @@ package com.brainmentors.game.sprites;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
@@ -14,6 +15,7 @@ public class Player extends CommonPlayer implements Constants {
 	private BufferedImage walkImages[] = new BufferedImage[5];
 	private BufferedImage kickImages[] = new BufferedImage[5];
 	private BufferedImage punchImages[] = new BufferedImage[3];
+	private BufferedImage powerImages[] = new BufferedImage[4];
 	
 	private int force;
 	
@@ -30,6 +32,7 @@ public class Player extends CommonPlayer implements Constants {
 		loadWalkImages();
 		loadPunchImages();
 		loadKickImages();
+		loadPowerImages();
 	}
 	
 	public void jump() {
@@ -68,6 +71,13 @@ public class Player extends CommonPlayer implements Constants {
 		kickImages[4] = playerImg.getSubimage(43, 1461, 130, 243);
 	}
 	
+	private void loadPowerImages() {
+		powerImages[0] = playerImg.getSubimage(29, 10, 155, 224);
+		powerImages[1] = playerImg.getSubimage(240, 10, 161, 224);
+		powerImages[2] = playerImg.getSubimage(439, 26, 197, 206);
+		powerImages[3] = playerImg.getSubimage(660, 26, 193, 206);
+	}
+	
 	private void loadPunchImages() {
 		punchImages[0] = playerImg.getSubimage(42, 489, 120, 242);
 		punchImages[1] = playerImg.getSubimage(258, 489, 169, 242);
@@ -96,10 +106,22 @@ public class Player extends CommonPlayer implements Constants {
 		return img;
 	}
 	
+	public BufferedImage printPower() {
+		if(imageIndex > 3) {
+			imageIndex = 0;
+			currentMove = IDLE;
+		}
+		BufferedImage img = powerImages[imageIndex];
+		imageIndex++;
+		return img;
+	}
+	
 	public BufferedImage printPunch() {
+		isAttacking = true;
 		if(imageIndex > 2) {
 			imageIndex = 0;
 			currentMove = IDLE;
+			isAttacking = false;
 		}
 		BufferedImage img = punchImages[imageIndex];
 		imageIndex++;
@@ -107,13 +129,25 @@ public class Player extends CommonPlayer implements Constants {
 	}
 	
 	public BufferedImage printKick() {
+		isAttacking = true;
 		if(imageIndex > 2) {
 			imageIndex = 0;
+			isAttacking = false;
 			currentMove = IDLE;
 		}
 		BufferedImage img = kickImages[imageIndex];
 		imageIndex++;
 		return img;
+	}
+	
+	private ArrayList<Power> powers = new ArrayList<>();
+	
+	public ArrayList<Power> getPowers() {
+		return powers;
+	}
+	
+	public void showPower() {
+		powers.add(new Power(x+w-50, y+h/2 - 70, playerImg));
 	}
 	
 	@Override
@@ -126,6 +160,9 @@ public class Player extends CommonPlayer implements Constants {
 		}
 		else if(currentMove == KICK) {
 			return printKick();
+		}
+		else if(currentMove == POWER) {
+			return printPower();
 		}
 		else {
 			return printIdle();

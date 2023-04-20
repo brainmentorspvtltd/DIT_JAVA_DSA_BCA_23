@@ -131,6 +131,9 @@ public class OpponentPlayer extends CommonPlayer implements Constants {
 		else if(currentMove == PUNCH) {
 			return printPunch();
 		}
+		else if(currentMove == HIT) {
+			return printHit();
+		}
 		else {
 			return printIdle();
 		}
